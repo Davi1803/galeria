@@ -20,11 +20,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //obtendo botão FAB
         FloatingActionButton fabAddItem = findViewById(R.id.fabAddNewItem);
+        //registrando um ouvidor de cliques
         fabAddItem.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                //navegando para NewActivity através de um intent
                 Intent i = new Intent(MainActivity.this,NewItemActivity.class);
+                //executando o intent a partir do método startActivityForResult
                 startActivityForResult(i, NEW_ITEM_REQUEST);
             }
         });
