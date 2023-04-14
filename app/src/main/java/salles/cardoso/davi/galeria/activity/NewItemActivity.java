@@ -45,7 +45,7 @@ public class NewItemActivity extends AppCompatActivity {
         });
         Button btnAddItem = findViewById(R.id.btnAddItem);
 
-        btnAddItem.setOnClickListener(new View.OnclickListener()){
+        btnAddItem.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
 
