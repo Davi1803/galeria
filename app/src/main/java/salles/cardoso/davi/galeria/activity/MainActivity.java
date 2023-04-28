@@ -8,17 +8,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import salles.cardoso.davi.galeria.R;
 import salles.cardoso.davi.galeria.adapter.MyAdapter;
 import salles.cardoso.davi.galeria.model.MyItem;
+import salles.cardoso.davi.galeria.util.Util;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,7 +81,17 @@ public class MainActivity extends AppCompatActivity {
                 //obtendo os dados de retorno e guardando em "myItem"
                 myItem.title = data.getStringExtra("title");
                 myItem.description = data.getStringExtra("description");
-                myItem.photo = data.getData();
+                Uri selectedPhotoURI = data.getData();
+
+                //Utilizando um try-catch para verificar se a imagem foi encontrada
+                try{
+                    //Utilizando função do Uri para carregar uma imagem e guardá-lo em um Bitmap
+                    Bitmap photo = Util.getBitmap(MainActivity.this, selectedPhotoURI, 100, 100);
+                    //Guardando o Bitmap da imagem dentro de um objeto do tipo MyItem
+                    myItem.photo = photo;
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
 
                 //adicionando o item "myItem" em uma lista de itens (itens) já definida como atributo na classe
                 itens.add(myItem);
