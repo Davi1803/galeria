@@ -2,6 +2,7 @@ package salles.cardoso.davi.galeria.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,13 +22,13 @@ import java.util.List;
 
 import salles.cardoso.davi.galeria.R;
 import salles.cardoso.davi.galeria.adapter.MyAdapter;
+import salles.cardoso.davi.galeria.model.MainActivityViewModel;
 import salles.cardoso.davi.galeria.model.MyItem;
 import salles.cardoso.davi.galeria.util.Util;
 
 public class MainActivity extends AppCompatActivity {
 
     static int NEW_ITEM_REQUEST =1;
-    List<MyItem> itens = new ArrayList<>();
     MyAdapter myAdapter;
 
     @Override
@@ -41,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
         //Obtendo um recycleView
         RecyclerView rvItens = findViewById(R.id.rvItens);
+
+        //Obtendo o ViewModel de MainActivityViewModel
+        MainActivityViewModel vm = new ViewModelProvider( this ).get(MainActivityViewModel.class);
+        //Repassando a lista de itens do ViewModel para o adapter
+        List<MyItem> itens = vm.getItens();
 
         //Criando um myAdapter
         myAdapter = new MyAdapter(this,itens);
@@ -92,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+
+                //Obtendo o ViewModel de MainActivityViewModel
+                MainActivityViewModel vm = new ViewModelProvider( this ).get(MainActivityViewModel.class);
+                //Repassando a lista de itens do ViewModel para o adapter
+                List<MyItem> itens = vm.getItens();
 
                 //adicionando o item "myItem" em uma lista de itens (itens) já definida como atributo na classe
                 itens.add(myItem);

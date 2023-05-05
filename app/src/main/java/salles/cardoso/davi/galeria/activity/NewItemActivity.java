@@ -1,6 +1,7 @@
 package salles.cardoso.davi.galeria.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,20 +17,33 @@ import android.widget.Toast;
 import org.jetbrains.annotations.Nullable;
 
 import salles.cardoso.davi.galeria.R;
+import salles.cardoso.davi.galeria.model.NewItemActivityViewModel;
 
 public class NewItemActivity extends AppCompatActivity {
 
     static int PHOTO_PICKER_REQUEST = 1;
     //guardando o endereço da foto selecionada em um atributo do tipo Uri
-    Uri photoSelected = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        //obtendo o ImageButton
+        //Obtendo o ViewModel de NewItemActivityViewModel
+        NewItemActivityViewModel vm = new ViewModelProvider( this ).get(NewItemActivityViewModel.class);
+
+        //Obtendo o endereço URI guardado dentro do ViewModel
+        Uri selectPhotoLocation = vm.getSelectPhotoLocation();
+        //Caso o endereço seja nulo (usuário escolheu a imagem antes de rotacionar a tela)...
+        if(selectPhotoLocation != null){
+            //Setando a imagem na tela após a condição
+            ImageView imvfotoPreview = findViewById(R.id.imvfotoPreview);
+            imvfotoPreview.setImageURI(selectPhotoLocation);
+        }
+
+
         ImageButton imgCl = findViewById(R.id.imbCl);
+
         //definindo um ouvidor de cliques para o ImageButton
         imgCl.setOnClickListener(new View.OnClickListener(){
             //criando método para ser executado após o clique
@@ -49,7 +63,13 @@ public class NewItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
 
-                if (photoSelected == null) {
+                //Obtendo o ViewModel de NewItemActivityViewModel
+                NewItemActivityViewModel vm = new ViewModelProvider( NewItemActivity.this).get(NewItemActivityViewModel.class);
+                //Obtendo o endereço URI guardado dentro do ViewModel
+                Uri selectPhotoLocation = vm.getSelectPhotoLocation();
+
+
+                if (selectPhotoLocation == null) {
                     Toast.makeText(NewItemActivity.this, "É necessário selecionar uma imagem!", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -69,7 +89,7 @@ public class NewItemActivity extends AppCompatActivity {
                 }
 
                 Intent i = new Intent();
-                i.setData(photoSelected);
+                i.setData(selectPhotoLocation);
                 i.putExtra("title", title);
                 i.putExtra("description", description);
                 setResult(Activity.RESULT_OK, i);
@@ -86,11 +106,16 @@ public class NewItemActivity extends AppCompatActivity {
             //verificando se a chamada foi bem sucedida (resultCode)
             if(resultCode == Activity.RESULT_OK);{
                 //obtendo o Uri da imagem escolhida e guardando em um atributo (photoSelected)
-                photoSelected = data.getData();
+                 Uri photoSelected = data.getData();
                 //obtendo o imageView
                 ImageView imvfotoPreview = findViewById(R.id.imvfotoPreview);
                 //setando o Uri
                 imvfotoPreview.setImageURI(photoSelected);
+
+                //Obtendo o ViewModel de NewItemActivityViewModel
+                NewItemActivityViewModel vm = new ViewModelProvider(this).get(NewItemActivityViewModel.class);
+                vm.setSelectPhotoLocation(photoSelected);
+
             }
         }
     }

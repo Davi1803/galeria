@@ -1,5 +1,6 @@
 package salles.cardoso.davi.galeria.model;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 public class MyItem {
